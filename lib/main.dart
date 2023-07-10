@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:ms_customer/providers/cart_provider.dart';
-import 'package:ms_customer/providers/stripe.dart';
-import 'package:ms_customer/providers/wish_provider.dart';
 import 'package:ms_customer/utilities/app_routes.dart';
+import 'package:ms_customer/utilities/color.dart';
 import 'package:ms_customer/utilities/routes.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'controller/providers/cart_provider.dart';
+import 'controller/providers/wish_provider.dart';
+import 'controller/stripe.dart';
 import 'firebase_options.dart';
 int? isViewed;
 void main() async {
@@ -25,7 +26,7 @@ void main() async {
   isViewed = prefs.getInt('onBoard');
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => Cart()),
-    ChangeNotifierProvider(create: (_) => Wish()),
+    ChangeNotifierProvider(create: (_) => WishList()),
   ], child: const MyApp()));
 }
 
@@ -35,7 +36,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-
+theme: ThemeData(
+  fontFamily: 'Poppins',
+  primaryColor: AppColor.primaryColor,
+  progressIndicatorTheme: const ProgressIndicatorThemeData(
+    color: AppColor.primaryColor
+  )
+),
       debugShowCheckedModeBanner: false,
       initialRoute:  isViewed != 0 ? AppRoutes.onBoarding : AppRoutes.welcomeScreen,
       // initialRoute: AppRoutes.onBoarding,
